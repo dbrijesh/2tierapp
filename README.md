@@ -100,8 +100,8 @@ The application is configured with the following Azure AD settings:
 
 ```typescript
 // Frontend (Angular)
-tenantId: '52451440-c2a9-442f-8c20-8562d49f6846'
-clientId: '01d37875-07ee-427e-8be5-594fbe4c5632'
+tenantId: 
+clientId: 
 redirectUri: 'http://localhost:4200/callback'
 ```
 
