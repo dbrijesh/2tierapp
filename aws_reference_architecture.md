@@ -484,4 +484,42 @@ Key benefits of this architecture include:
 - **Cost Optimization**: Right-sizing and efficient resource utilization
 - **Compliance**: Comprehensive auditing and governance controls
 
+
+- name: Install GitHub CLI (robust)
+  run: |
+    if command -v gh >/dev/null 2>&1; then
+      echo "✓ GitHub CLI already installed: $(gh --version | head -n1)"
+    else
+      echo "Installing GitHub CLI..."
+      
+      # Clean package cache first
+      sudo yum clean all
+      sudo yum makecache
+      
+      # Retry installation up to 3 times
+      for attempt in {1..3}; do
+        echo "Installation attempt $attempt/3..."
+        
+        if timeout 300 sudo yum install gh -y; then
+          echo "✓ GitHub CLI installed successfully"
+          gh --version
+          break
+        else
+          exit_code=$?
+          echo "✗ Attempt $attempt failed (exit code: $exit_code)"
+          
+          if [ $attempt -lt 3 ]; then
+            echo "Cleaning cache and retrying in 10 seconds..."
+            sudo yum clean all
+            sleep 10
+          else
+            echo "✗ All installation attempts failed"
+            exit 1
+          fi
+        fi
+      done
+    fi
+
+
+
 Regular reviews and updates of this architecture ensure it continues to meet evolving business requirements and incorporates AWS best practices and new service capabilities.
